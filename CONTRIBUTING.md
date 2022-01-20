@@ -34,11 +34,18 @@ yarn install
 
 Setting up the db, you will need to have a Postgres installed locally, you can [follow this guide](https://redwoodjs.com/docs/local-postgres-setup).
 
-Run the following (Note: these commands require the `DATABASE_URL` env variable to be set. if you see no result when you run `echo $DATABASE_URL`, you can set it with a command like `export DATABASE_URL=postgres://postgres:somepassword@localhost`)
+Before you begin the next step these it is required that the `DATABASE_URL` env variable be set. If you see no result when you run `echo $DATABASE_URL`, you can set it with this command `export DATABASE_URL=postgresql://<yourusername>@localhost:5432/<your db name>?connection_limit=1`
+
+Note: After setting up a local Postgres environment you can enter `psql` and it will return your username. For `<your db name>` you can make it any sensible name, {e.g. cadhub_dev}, that will become the name of the db. Postgres will create the db if it does not exist.
+
+Once the `DATABASE_URL` is set you can run the following:
+
 ``` terminal
 yarn rw prisma migrate dev
 yarn rw prisma db seed
 ```
+
+Once this is complete you can run `yarn rw dev` and your local environment should be live! Congratulations.
 
 p.s. `yarn rw prisma studio` spins up an app to inspect the db
 
