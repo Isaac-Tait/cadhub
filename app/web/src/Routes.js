@@ -35,6 +35,7 @@ const Routes = () => {
   )
   return (
     <Router>
+      <Route path="/search" page={SearchPage} name="search" />
       <Route path="/projects" page={ProjectsPage} name="projects" />
       <Route path="/dev-ide/{cadPackage}" page={DevIdePage} name="devIde" />
       <Route path="/policies/privacy-policy" page={PrivacyPolicyPage} name="privacyPolicy" />
