@@ -1,0 +1,39 @@
+{
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "api",
+      "web"
+    ]
+  },
+  "scripts": {
+    "cad": "yarn rw build api && docker-compose --file ./api/src/docker/docker-compose.yml up --build",
+    "cad-r": "yarn rw build api && docker-compose --file ./api/src/docker/docker-compose.yml restart",
+    "aws-emulate": "nodemon ./api/src/docker/aws-emulator.js"
+  },
+  "devDependencies": {
+    "@redwoodjs/core": "^0.38.1"
+  },
+  "eslintConfig": {
+    "extends": "@redwoodjs/eslint-config",
+    "rules": {
+      "react/no-unescaped-entities": [
+        "error",
+        {
+          "forbid": [
+            ">",
+            "}",
+            "\""
+          ]
+        }
+      ]
+    }
+  },
+  "engines": {
+    "node": ">=14.x <=16.x",
+    "yarn": ">=1.15"
+  },
+  "prisma": {
+    "seed": "yarn rw exec seed"
+  }
+}

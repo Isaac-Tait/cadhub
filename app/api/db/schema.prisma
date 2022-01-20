@@ -1,0 +1,118 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "darwin-arm64", "darwin"]
+}
+
+// sqlLight does not suport enums so we can't use enums until we set up postgresql in dev mode
+// enum Role {
+//   USER
+//   ADMIN
+// }
+
+model User {
+  id       String  @id @default(uuid())
+  userName String  @unique // reffered to as userId in @relations
+  email    String  @unique
+  name     String?
+  // role should probably be a list [] and also use enums, neither are supported by sqllight, so we need to set up postgresql in dev
+  // maybe let netlify handle roles for now.
+  // role     String @default("user")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  image                String? // url maybe id or file storage service? cloudinary?
+  bio                  String? //mark down
+  Project              Project[]
+  Reaction             ProjectReaction[]
+  Comment              Comment[]
+  SubjectAccessRequest SubjectAccessRequest[]
+}
+
+enum CadPackage {
+  openscad
+  cadquery
+  jscad
+  curv
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  title       String   @db.VarChar(25)
+  description String? // markdown string
+  code        String?
+  mainImage   String? // link to cloudinary
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  deleted     Boolean  @default(false)
+  cadPackage  CadPackage @default(openscad)
+  socialCard  SocialCard?
+  forkedFromId String?
+  forkedFrom   Project? @relation("Fork", fields: [forkedFromId], references: [id])
+
+  childForks   Project[] @relation("Fork")
+  Comment      Comment[]
+  Reaction     ProjectReaction[]
+  @@unique([title, userId])
+}
+
+model SocialCard {
+  id          String   @id @default(uuid())
+  projectId   String   @unique
+  project     Project  @relation(fields: [projectId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  url         String? // link to cloudinary
+  outOfDate   Boolean  @default(true)
+}
+
+model ProjectReaction {
+  id     String @id @default(uuid())
+  emote  String // an emoji
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  project   Project   @relation(fields: [projectId], references: [id])
+  projectId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([emote, userId, projectId])
+}
+
+model Comment {
+  id     String @id @default(uuid())
+  text   String // the comment, should I allow mark down?
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  project   Project   @relation(fields: [projectId], references: [id])
+  projectId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SubjectAccessRequest {
+  id      String @id @default(uuid())
+  comment String
+  payload String // json dump
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RW_DataMigration {
+  version    String   @id
+  name       String
+  startedAt  DateTime
+  finishedAt DateTime
+}

@@ -1,0 +1,54 @@
+---
+title: Your Openscad Journey
+---
+
+import Image from '@theme/IdealImage';
+
+import hinge from '../../static/img/getting-started/complete-hinge.png';
+import plainCube from '../../static/img/openscad-tutorial/plain-cube.png';
+import tallCube from '../../static/img/openscad-tutorial/tall-cube.png';
+
+
+In order to maximise our learning we're actually going to tackle 3 things, that is feed 3 birds with one scone.
+
+We're going to learn:
+
+1. Some basic programming and the OpenSCAD syntax
+2. Some best practices so that you can read your own code a couple days after you wrote it
+3. Get practise designing a real thing with tolerances and all so that you're well equiped to make your next thing
+
+<p className="mt-8">
+  We're going to achieve that by making this cute print-in-place hinge, print in place means that there will be no assembly step, both parts of the hinge will be printed pre-assembled.
+</p>
+
+<Image img={hinge} className="mb-8 bg-contain rounded-md overflow-hidden" />
+
+**[Live Demo](https://cadhub.xyz/dev-ide/openscad#encoded_script_v2=eJyFVU2P0zAQPZNf4QMHp022TrpIQPEFtGiRqEBoJYRWFTKJ01qkTnGSFRXqf8dObNdOXeihssczb2befOR5xfEyX0UH9tR0X0jJ+ha/WEU/SEsfdqz4yWnb4uUo+MrKbocz+bxjfEs/Ur6V9yVS1lzbDlD8gRyowOgml7pFTYkgvKDqrk3vSV3d/e5EXxoUB3GRp9ZmIS06xo/SFiEJtm96Lu/b+6am2mN2M5G/U2cVsyu8K7f0U1W1tMO3/su6eaIfeCHonkoz6ASS5rMwRLyInsELl2kWryIJXfY1BQPMW0naZ9FUrKYwBn8iADqZVVuTjsJHh/EEJWgTq3cA2l89EfLZEp54tdhIHwCcotPEU1MeFanaTcmqigoqCdQCAHrOGm5vANSMS46/07EKMFyW2GgD0AyZwyzWhzSPreis5WWIEi/HjacHQMGErDN0dIbczO/knA0pLp5z3niGl9SfXw3o6R8s/D/1LL7uY0Qe/w+KB9UfLbwom5wSKJpOKnxLgBjS0M01bRSfxnCh5mpIDMEjrDI0DiT3tvDFUSZdUgFtfpPpmzvTl1glkWE75XM3Xkcld1TMFvB0taom6xTqZJXae7ondmQCvTxp+RHNIRRnL5FPKrY5hedHAa1JaEzlaCYOPZbIM8nKmUtwMDo/vml06AojbgMN+FUjIMOP6HVg+5jyO8Fr13aXyOK6vaSfU2/DGCmbXd2S8/BaBIsFeJOmgJSlnpkB6jz3hrP0FXJXnteVAl/u+GSHvRBnt4FxG3i7aCHng7PWgr/XjS66)**
+
+This tutorial makes no assumption about previous knowledge, which means it's fine you you haven't done any programming before, we'll walk you through it.
+
+If you came here from "[getting started](/docs)" then you would have already got a shape on screen with `cube([10,10,10]);`.
+If you came from elsewhere, open the OpenSCAD desktop app or go to our [online editor](https://cadhub.xyz/dev-ide/openscad), and add `cube([10,10,10]);` to get the following cube:
+
+<Image img={plainCube} className="mb-8 bg-contain rounded-md overflow-hidden" />
+
+OpenSCAD has a number of modules available that allow us to make shapes and `cube` is one of them.
+Modules take the form `moduleName(moduleParameters);` or `moduleName(moduleParameters){children}`.
+Using the `cube` as an example, it take the first form where the moduleName is `cube` and it takes one parameter, though that parameter is an array denoted by the square brackets `[]`, which is basically a series of values.
+
+Try changes the line to `cube([10,10,20]);`. You should see the cube grow twice as tall as it was previously
+
+<Image img={tallCube} className="mb-8 bg-contain rounded-md overflow-hidden" />
+
+That's because the `[10,10,20]` is giving the cube's dimensions in each axis, the order is `[x, y, z]`, and as we've seen the `z` axis is the vertical axis.
+
+Before we go any further, now is a good time to mention a couple of principles that you should always keep in mind for OpenSCAD and programming in general
+
+1. Computers are incredibly stupid, but do exactly what you tell them to do, which means if there's even a small part of code that's incorrect, then OpenSCAD will display errors, it's normal for this to happen often and bears no reflection on your ability to program, keep at it! which leads to the next point.
+2. Never get intimidated, if you don't understand a part of the syntax or code try changing the parameters, see what happens. Playing with the code in this manner is one of the best ways to learn.
+3. The [OpenSCAD cheatsheet](https://www.openscad.org/cheatsheet/) is very useful as a reference. You should always have it open in a tab.
+4. There are multiple ways to call these modules, i.e. `cube([10,10,10]); cube(size=[10,10,10]); cube([10,10,10], false);` all have the same result, it depends on if you prefer shorthand or not, to avoid confusion, for this tutorial we'll use longhand `argumentName=value` in circumstances where we're using more than one argument, and shorthand if it's only one, i.e. `cube([10,10,10]);` (`[10,10,10]` is considered one value because it a single array).
+5. Don't worry about units. nominally the units are in the metric millimetre, since that is the standard global engineering unit, but because it exists in virtual space they are effectively unit-less and can be scaled later.
+6. If your code isn't working, 9 out of 10 times it's because you are missing a semi-colon `;`, Generally speaking most lines apart from ones with a curly brace `}` need to end with a semi-colon.
+
+

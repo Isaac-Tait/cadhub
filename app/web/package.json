@@ -1,0 +1,65 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "private": true,
+  "browserslist": {
+    "development": [
+      "last 1 version"
+    ],
+    "production": [
+      "defaults",
+      "not IE 11",
+      "not IE_Mob 11"
+    ]
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.4.1",
+    "@heroicons/react": "^1.0.4",
+    "@material-ui/core": "^4.11.0",
+    "@monaco-editor/react": "^4.0.11",
+    "@react-three/drei": "^7.3.1",
+    "@react-three/fiber": "^7.0.5",
+    "@react-three/postprocessing": "^2.0.5",
+    "@redwoodjs/auth": "^0.38.1",
+    "@redwoodjs/forms": "^0.38.1",
+    "@redwoodjs/router": "^0.38.1",
+    "@redwoodjs/web": "^0.38.1",
+    "@sentry/browser": "^6.5.1",
+    "@tailwindcss/aspect-ratio": "0.2.1",
+    "axios": "^0.21.1",
+    "browser-fs-access": "^0.17.2",
+    "cloudinary-react": "^1.6.7",
+    "get-active-classes": "^0.0.11",
+    "gotrue-js": "^0.9.27",
+    "hotkeys-js": "^3.8.7",
+    "html-to-image": "^1.7.0",
+    "lodash": "^4.17.21",
+    "netlify-identity-widget": "^1.9.1",
+    "pako": "^2.0.3",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-dropzone": "^11.2.1",
+    "react-ga": "^3.3.0",
+    "react-helmet": "^6.1.0",
+    "react-hotkeys-hook": "^3.4.0",
+    "react-image-crop": "^8.6.6",
+    "react-intersection-observer": "^8.32.1",
+    "react-mosaic-component": "^5.0.0",
+    "react-tabs": "^3.2.2",
+    "rich-markdown-editor": "^11.0.2",
+    "styled-components": "^5.2.0",
+    "three": "^0.130.1",
+    "worker-loader": "^3.0.8"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.170",
+    "autoprefixer": "^10.3.1",
+    "html-webpack-plugin": "^4.5.0",
+    "postcss": "^8.3.6",
+    "postcss-import": "^14.0.2",
+    "postcss-loader": "^6.1.1",
+    "raw-loader": "^4.0.2",
+    "tailwindcss": "^2.2.7"
+  }
+}

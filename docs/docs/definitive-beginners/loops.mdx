@@ -1,0 +1,216 @@
+---
+title: Loops
+---
+
+import Image from '@theme/IdealImage';
+
+import hole1 from '../../static/img/openscad-tutorial/hole1.png';
+import hole2 from '../../static/img/openscad-tutorial/hole2.png';
+import hole3 from '../../static/img/openscad-tutorial/hole3.png';
+import hole4 from '../../static/img/openscad-tutorial/hole4.png';
+import hole5 from '../../static/img/openscad-tutorial/hole5.png';
+import hole6 from '../../static/img/openscad-tutorial/hole6.png';
+import finishedHinge from '../../static/img/openscad-tutorial/finished-hinge.png';
+
+Let's remove the male hinge for now and add a new `module` called `plateHoles`.
+We'll start by adding adding a cylinder that's definitely longer than the plate is thick, we'll than rotate it by 90 degrees and move it a little:
+
+```cpp
+// ... other variable definitions
+mountingHoleRadius=1.5;
+
+// ... other module definitions
+// highlight-start
+module plateHoles() {
+  translate([baseWidth/2+pivotRadius,-baseThickness,0]){
+    rotate([-90,0,0]){
+      cylinder(r=mountingHoleRadius,h=baseThickness*4);
+    }
+  }
+}
+// highlight-end
+
+%hingeHalfFemale();
+// hingeHalfMale();
+plateHoles();
+```
+**[Live Demo](https://cadhub.xyz/dev-ide/openscad#encoded_script_v2=eJx9VF2r1DAQfe+vyINC63bvpl0vKCUvgnIfFEUuiMhyie10N9ibrmkrLrL/3Uk/cidtdaFsk8ycOed0Js9KLfZpFpzVr7r9LAvVNeI2C77LBu5PKv+hoWnEftj4oor2JBI8Pil9hPegj7jec5utx9weSt/LMxjBb1KMzSuQRuoc7HpMvZNV+fZ3a7piQiGIu3TrcnaY0Sp9wVzOEeyx7jSuj3d1BWPF5Ab38aDoKmA9zBvk+snUpaogjNifgLEWwZpKthB+I0JjHvNDZM8Za3520uCx0xl7FhyiDMOuwXVWqS4uVstYplIaeT/AoCxclzoWrMuygTZMovFlm0Zua4jwaPPYI35wMYzlyqBfITnvydrfdfyf1FEM8n5wCUv/hpNrMDxrCv8vK4nWMamX2DGhqVsU+jVmpqf0sU9ffD3fhnWDN7ZhJoMGWJs4FUDv2GRefkFBBZjQmTnrxA3pxNgFmUS4jt9QviQkJSHTRHixY6hn8Ky9rLR38ChdHxeqLMEA0gknEbM+HNCIoSJ5xX1ThdO03tQW6INcmx2cl5jY44x8MtkWowavsvP5zdnxfzhythzs3DdLYm5q8YvRBtl6Q/w0NhPh7WtOLwHSEEYsr5r4JDy8Fy/nVJ8vPlsW7HZzW/GKJFqy4C+o/cLo)**
+
+<Image img={hole1} className="mb-8 bg-contain rounded-md overflow-hidden" />
+
+## Basic Loop
+
+From here we can see how we can use this new `cylinder` along with `difference` to make a hole in the hinge base, but it's not quiet in the right place (it's half hanging off the edge), lets add a variable for how close we want the hole to sit from the edge `mountingHoleEdgeOffset=4;`.
+But bear in mind we also want to want multiple of these hole and it would be good if we could avoid "hard-coding" each one. Luckly we're able to layout a number of holes efficiently with a `for` loop.
+Lets add another variable `mountingHoleCount=3;`. There's a few ways to use a `for` loop in OpenSCAD, but we're going to use the simplest case, it's defined as
+`for(increment=[startNumber:endNmuber]){ /* your code ... */ }`
+
+`increment` is another variable, we can name it anything we want (`i` is very common) but increment is a good name.
+The code that runs within the curly braces `{}` is run multiple times for each number in the range between `startNumber` and `endNumber`, and the value of `increment` will update each time it's run. To make this concrete, we want 3 holes so lets add the following to `plateHoles`:
+
+```cpp
+module plateHoles() {
+  // highlight-start
+  for(increment=[0:2]){
+    echo("increment is currently", increment);
+    // highlight-end
+    translate([baseWidth/2+pivotRadius,-baseThickness,0]){
+      rotate([-90,0,0]){
+        cylinder(r=mountingHoleRadius,h=baseThickness*4);
+      }
+    }
+  }
+}
+```
+**[Live Demo](https://cadhub.xyz/dev-ide/openscad#encoded_script_v2=eJx9VO+r0zAU/d6/IjwUWte9pZ2CWvJFUN4HRZEHIo8hsb3dgl0601Qcsv/93bRpTLrqYGzt/XXOybl5Uku2zYvoJH61+jOvRN+xF0X0nXdwfxDlDwldx7bjiy+i0geWYfgg5B7eg9zj85aaamlrh1bynp9AMXqbY27ZAFdclmCebekdb+q3v7Xqq6mL13GTr13NBiu0kGespRSbHdte4vP+rm3ATsxu8T0Gqr4BMrR5g1g/qbYWDcQJ+RMRorFZ13AN8YNHNKUp3SUmTkj3s+cKw45nGkiwSwpMu0SX2aS2OhsudkwjJOL+BiOzeJmqHdjWdQc6zhL7Z50n7tWYEcCmaQB853IIKYVCvWIvPoA1n4v9ndj5Pbz/O1dwrd8YuUTjd4nh/2llyXJPX0t0TKxajUS/pkQNkD4O5VenF8qwLPDKGGYSaGxrCqcBqB2ZxCvPSKgCFTsxZ05ceU5MXZLKmHP8ysfrpeReyrQRQa5NDQSe2ctQewdH7nxciboGBQgnnkjMfDh28wRl2Usaisocp2VTm0Yf+NLu4L6knjxOyL8im2G+wIvoQnxzdPQfipwMBrP3nQVWtyoWslRwBKnZA32dT4cO5aGNb1yMiI6UvULddHO+SYkL2EkeQ7f+ePS+09bBbeDv38R9/Yr690ngLsWu7630wIKez57Pttbxf3rlhSLabOZnhfeuJ1ARPQKVU9x1)**
+
+The reason we're using `[0:2]` and not `[0:3]` is because `0` counts so the code still runs 3 times.
+I've also introduced another function `echo`, this function can be used to display text to the console, we've added it as a temporary measure to help demonstrate that the code in the `for` loop is run multiple times.
+You should see the the following in the console:
+
+```cpp
+ECHO: "increment is currently", 0
+ECHO: "increment is currently", 1
+ECHO: "increment is currently", 2
+// followed by some internal OpenSCAD messages
+```
+
+## Repeating Geometry
+
+Great, `echo` runs three times. Since we know the value of `increment` changes, lets use that to our advantage and change the Z-axis value of `translate` like so:
+
+```cpp
+module plateHoles() {
+  for(increment=[0:2]){
+    // highlight-next-line
+    translate([baseWidth/2+pivotRadius,-baseThickness,increment*10]){
+      rotate([-90,0,0]){
+        cylinder(r=mountingHoleRadius,h=baseThickness*4);
+      }
+    }
+  }
+}
+```
+**[Live Demo](https://cadhub.xyz/dev-ide/openscad#encoded_script_v2=eJx9VFGL1DAQfu+vyINCe9u9TbsnqCUvgnIPiiIHIscisZ3uBrvpmrbiIvvfnbRJLulWF8o2zcw33/dlJs9qybZ5EZ3Er7b/zCsxdOxFEX3nHTwcRPlDQtex7fThi6j6A8tw+yDkHt6D3ON6S3W2NLkjlHzgJ1CM3uYYWzbAFZcl6LVJvedN/fZ3r4bKoniIm3ztcjaY0Qt5xlxKEezYDhLX+/u2AVMxu8XvuFENDZAR5g1y/aTaWjQQJ+RPREiPYF3De4gfPaEpTeku0fuEdD8HrnDb6UwDC3ZJgWGX6DKr1FZnrcWUaYRE3t9gUhYvSzUF27ruoI+zxLys88R9miIC2jQNiO9cDCGlUOhX7O2PZPXvYv6tOh/De9+5hGv/pp1LND1LCv8vK0uWMX0vsWNi1fYo9GtK1Ejp45h+dXqhDcsGr3TDWIMmWJ1oC6B3xJpXnlFQBSp2Zs46ceV1YuqCVMZcx698vl5I7oXYiQhiTWhg8Ky9tLR3cOSujytR16AA6cRWxKwPJzTPUJa9pKGpzGlabmoN9IEvzQ7OS+rZ44x8MlkX8w1eZBfym7Oj/3DkpDnoue8MsbpVsZClgiPInj3S17k9dI+ym2c8S7911sF4pw7nJvNmy+pav6L+XRF0jmLXd1J6YAH8zd1sIp2251fnXESbzfwc8E71xBfRX/N90MI=)**
+
+<Image img={hole2} className="mb-8 bg-contain rounded-md overflow-hidden" />
+
+And just like that we have three evenly spaced `cylinders`!
+
+## Calculating distribution
+
+I'm sure you can see where this is going, we need to make a few tweaks to get this all polished though.
+First lets use our variables, both the new `mountingHoleCount` and we can use that calculate a new variable `mountingHoleMoveIncrement=hingeLength/(mountingHoleCount-1);`
+This will be the gap between each of the holes, the reason we're using `(mountingHoleCount-1)` is because counting the gaps between holes, there's one less than the amount of holes. let's now add `increment*mountingHoleMoveIncrement`:
+
+```cpp
+// highlight-next-line
+mountingHoleMoveIncrement=hingeLength/(mountingHoleCount-1);
+
+module plateHoles() {
+  // highlight-start
+  for(i=[0:mountingHoleCount-1]){
+    translate([baseWidth/2+pivotRadius,-baseThickness,i*mountingHoleMoveIncrement]){
+    // highlight-end
+      rotate([-90,0,0]){
+        cylinder(r=mountingHoleRadius,h=baseThickness*4);
+      }
+    }
+  }
+}
+```
+**[Live Demo](https://cadhub.xyz/dev-ide/openscad#encoded_script_v2=eJx9lG2L1DAQx9/3U+SFQnrb3qa7CmrJG0U5wUORA5FjkdhOd4PddE3bw0X2uzvpQy5pey6UbZN5+M8vM3lWKL7dpMFJPlTNV5HLtuYv0+CnqOHuILNfCuqab/uFbzJvDjzB7YNUe/gEao/fW2a81eDbhVJ34gSas+sN2mYlCC1UBuZ7cL0RZfH+T6PbfIziRFxvYuuzRo9GqjP6MobBjlWr8Ht/U5UwZEyuJ+vvzLvR7C7eVg/wUWUajoCbbjY6842TMA3QO29LIJ3pW6z+i64KWQINyd+AkAbl1aVogN476CIWsV1o9gmpf7dC47YlF3lQd5iDkEtwmWSq8rOhM6QppUISP6BnRZfhDQmroqihoUk4vMSb0C71Fp5sFnnCd9aGkExqPAHq7Hdize8y/I/VuTGc9511mPPrdy5B/yxV+P+yknA5pssSe5DqqsFCv0dEd5I+d+6z0/MxLANemRYcAfVhjeOYANmREV52xoJy0NTCnPT2yuntyBrphNsZWrl6HZONYzLOmGc7mHqAJ+1lSvsAR2H7OJdFARpQDh2LmPRhH80BypNXzIfKbU3LTW0C3Yql2cF5iRw8FuQjZJPMBbyoztc3VceeIHIyGszU14OwotJU8nv2ZuFKGI/fEW8nG0/VbaLYG/RIXj15ET0O3Vhw/Jq5l4jXUprPr7/owL1sVy8mo2qLfj5rgDRYr6cHhNe3QyUN/gHJXvnH)**
+
+<Image img={hole3} className="mb-8 bg-contain rounded-md overflow-hidden" />
+
+Awesome, it obvious that the hole spacing is related to the length of the hinge now, we can even increase the amount of holes with mountingHoleCount=4; and it looks correct:
+
+<Image img={hole4} className="mb-8 bg-contain rounded-md overflow-hidden" />
+
+Though we still have the problem if the holes sitting right on the edge.
+We defined `mountingHoleEdgeOffset` earlier lets now use it in the `mountingHoleMoveIncrement` calculation.
+
+```cpp
+mountingHoleEdgeOffset=4;
+// highlight-start
+mountingHoleMoveIncrement=(hingeLength-2*mountingHoleEdgeOffset)/
+	(mountingHoleCount-1);
+// highlight-end
+
+module plateHoles() {
+  // highlight-start
+  for(i=[0:mountingHoleCount-1]){
+    translate([baseWidth/2+pivotRadius,-baseThickness,i*mountingHoleMoveIncrement]){
+    // highlight-end
+      rotate([-90,0,0]){
+        cylinder(r=mountingHoleRadius,h=baseThickness*4);
+      }
+    }
+  }
+}
+```
+**[Live Demo](https://cadhub.xyz/dev-ide/openscad#encoded_script_v2=eJx9VG1r2zAQ/jz/Cn3YQE7sWnY62Gb0ZaOjg5WNUSilhOHZ50TMkTPZLgsl/32n2FYlx13ARC93zz333J1el5KvktTbi8e6/ZEVomv429T7lTVwuxX5bwlNw1f9wZ0o2i2P8Xor5Aa+gtzgfsW0txx8T1DyNtuD4uwiQdu8gkxlMge9H1yvs6q8+tuqrhhRLMQoCY1PhB6tkAf0ZQzBdnUncb+5risYIsYXk/NPeq0524dXxQa+lWUDLb90b27qR/gicwU7QDdqEQmTxTyEH3mv6FnIMPZTD6GLrgJygvmIon1XdSkqoD558ghpMaumylqgD5biAQvY2tf3hDR/ukzhtRE8cGqxxhiEHL3jJFJdHLSoQ5hKSBTwJ/QS03nNh4D1KSUa+8MiTHxz1Fs4tFngEF8bG0JyobBw1Lo/kdW/4/A/ZmdjWOu1cTjXr785ev03l+H/04r9eUxbS2xdquoWE70PiDpRGio+rZ4rw7zAS925o0A9rHYcA6B2ZBQvP2BCBShqxJyMxNIaicAYqZib0VvafC2TxDIZR9OxHUwdgSftpVP7DLvM9HEhyhIUIB06JjHpwx7NEpTH75grKjc5zTe1BrrJ5mYH5yWw5DFCPousg9kCz7Jz+U3ZsRcU2WsOeuqbgVhZKyr4A/sw8ySM5bfIm8nGqtpNFDqDHojFi6/U89CNCYfvmf2IOC2l+PmrGWy5E21xORlVk/SbswZIvSiaFghffUuV1PsH4gQNIw==)**
+
+<Image img={hole5} className="mb-8 bg-contain rounded-md overflow-hidden" />
+
+We subtract `2*mountingHoleEdgeOffset` from the `hingeLength` because we are limiting the amount of space the holes can spread out in, it `2*` the offset because we want that space of both sides, but clearly we don't have a gap on each side yet, but this is just a matter of where the first hole starts, so the last step for our `for` loop is to shift it over a little:
+
+```cpp
+module plateHoles() {
+  for(i=[0:mountingHoleCount-1]){
+    translate([
+      baseWidth/2+pivotRadius,
+      -baseThickness,
+      // highlight-next-line
+      i*mountingHoleMoveIncrement+mountingHoleEdgeOffset // <-- add offset
+    ]){
+      rotate([-90,0,0]){
+        cylinder(r=mountingHoleRadius,h=baseThickness*4);
+      }
+    }
+  }
+}
+```
+**[Live Demo](https://cadhub.xyz/dev-ide/openscad#encoded_script_v2=eJx9VVFr2zAQfp5/hR42kBO7lp0Otnl62ejoYGWjFMooYWi2nIg5ciY7ZWHkv+9ky6rkuAuE2Lq777777k55WUm6yvJgLx6b7paV4tDS13nwk7X8biuKX5K3LV0NB/ei7LY0BfNWyA3/wuUG3ldER0sT20PJO7bnipKLDHyLmjPFZMH1uwm9ZnV19adTh3JEcRCTLLYxCUR0Qh4hlhAA2zUHCe+b66bmJmN6MTn/qJ81Z/fwqtzwr1XV8o5e+pab5pF/loXiOw5h2CESZ4t5iDAJXuCzlHEa5gFAl4eaox7mA4j2TTWVqDkO0d8AoQ6qamvWcfzgKB6RiKxDbUeo/X1gCsxW8MjrxRpyIHQKTpNMTXnUopo0tZAg4A8+SIznNTcJm74knIbmIc5CezR4eLRJ5BFfWx+ECqGgcdix92T152R+x+pcDOd5bQPO9Rssp2D4zlX4/7LScB7T1RJGF6umg0K/R0j1lEzHp93zZZgXeKkndxRogNWBYwLQDo3iFUcoqOQKWzEnK7F0ViKyTiqldvWWLl/HJXNcxtX0fI2rJ/BkvHRpn/iO2TkuRVVxxYEOHouYzOGA5ghK0zfEF5XamuaHWgPdsLndgX2JHHmskE8i62SuwLPsfH5TduQZRfaag9761hCrGoUFfSDvZq6Esf0OeZPaLjg0150lY469tR9PxeLZq2s5f1ehJEHv4xixsjQ70UM97e2oWfyWuPeQN5WKnl+80ZZ6FBeXk223ur06m6E8AFaTHsMfhyNsHvwDoz0eLw==)**
+
+<Image img={hole6} className="mb-8 bg-contain rounded-md overflow-hidden" />
+
+Fantastic! now that we have our holes placed, we need to use `difference` to actually cut the holes into the part, but where to do it?? We could use `difference` in both the male and female parts but that would require doing the same thing twice. The best place to do it is in `hingeBodyHalf` since this module is common to both sides of the hinge:
+
+```cpp
+module hingeBodyHalf() {
+  // highlight-start
+  difference() {
+    union() {
+    // highlight-end
+      linear_extrude(hingeHalfExtrudeLength){
+        offset(1)offset(-2)offset(1){
+          translate([0,pivotRadius,0]){
+            circle(pivotRadius);
+          }
+          square([pivotRadius,pivotRadius]);
+          hingeBaseProfile();
+        }
+      }
+      linear_extrude(hingeLength){
+        offset(1)offset(-1)hingeBaseProfile();
+      }
+    }
+    // highlight-next-line
+    plateHoles();
+  }
+}
+
+// .. more code
+
+hingeHalfFemale();
+hingeHalfMale();
+```
+**[Live Demo](https://cadhub.xyz/dev-ide/openscad#encoded_script_v2=eJyFVU2P0zAQPZNf4QMHp022TrpIQPEFtGiRqEBoJYRWFTKJ01qkTnGSFRXqf8dObNdOXeihssczb2befOR5xfEyX0UH9tR0X0jJ+ha/WEU/SEsfdqz4yWnb4uUo+MrKbocz+bxjfEs/Ur6V9yVS1lzbDlD8gRyowOgml7pFTYkgvKDqrk3vSV3d/e5EXxoUB3GRp9ZmIS06xo/SFiEJtm96Lu/b+6am2mN2M5G/U2cVsyu8K7f0U1W1tMO3/su6eaIfeCHonkoz6ASS5rMwRLyInsELl2kWryIJXfY1BQPMW0naZ9FUrKYwBn8iADqZVVuTjsJHh/EEJWgTq3cA2l89EfLZEp54tdhIHwCcotPEU1MeFanaTcmqigoqCdQCAHrOGm5vANSMS46/07EKMFyW2GgD0AyZwyzWhzSPreis5WWIEi/HjacHQMGErDN0dIbczO/knA0pLp5z3niGl9SfXw3o6R8s/D/1LL7uY0Qe/w+KB9UfLbwom5wSKJpOKnxLgBjS0M01bRSfxnCh5mpIDMEjrDI0DiT3tvDFUSZdUgFtfpPpmzvTl1glkWE75XM3Xkcld1TMFvB0taom6xTqZJXae7ondmQCvTxp+RHNIRRnL5FPKrY5hedHAa1JaEzlaCYOPZbIM8nKmUtwMDo/vml06AojbgMN+FUjIMOP6HVg+5jyO8Fr13aXyOK6vaSfU2/DGCmbXd2S8/BaBIsFeJOmgJSlnpkB6jz3hrP0FXJXnteVAl/u+GSHvRBnt4FxG3i7aCHng7PWgr/XjS66)**
+
+We're using `difference` here as planned, but we've also introduced a new operation `union`.
+`union` allows us to combine shapes into one, which is important here since `difference` works by subtracting the second child from the first and because both of the `linear_extrudes` are children `union` lets us combine them into a single child so that we can subtract `plateHoles`.
+
+Here's the result!
+
+<Image img={finishedHinge} className="mb-8 bg-contain rounded-md overflow-hidden" />
