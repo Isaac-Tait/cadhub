@@ -6,12 +6,12 @@
 
 <!-- [![Netlify Status](https://api.netlify.com/api/v1/badges/77f37543-e54a-4723-8136-157c0221ec27/deploy-status)](https://app.netlify.com/sites/cadhubxyz/deploys) -->
 
-Let's help Code-CAD reach its [full potential!](https://cadhub.xyz) We're making a ~~cad~~hub for the Code-CAD community, think of it as model-repository crossed with a live editor. We have integrations in progress for [OpenSCAD](https://cadhub.xyz/dev-ide/openscad) and [CadQuery](https://cadhub.xyz/dev-ide/cadquery) with [more coming soon](https://github.com/Irev-Dev/curated-code-cad).
+Let's help Code-CAD reach its [full potential!](https://cadhub.xyz) We are making a ~~cad~~hub for the Code-CAD community, think of it as model-repository crossed with a live editor. We have integrations in progress for [OpenSCAD](https://cadhub.xyz/dev-ide/openscad) and [CadQuery](https://cadhub.xyz/dev-ide/cadquery) with [more coming soon](https://github.com/Irev-Dev/curated-code-cad).
 
 If you want to be involved in anyway, checkout the [contributing.md](https://github.com/Irev-Dev/cadhub/blob/main/CONTRIBUTING.md).
 
-you might also be interested in the [Road Map](https://github.com/Irev-Dev/cadhub/discussions/212) and getting in touch via, [twitter](https://twitter.com/IrevDev), [discord](https://discord.gg/SD7zFRNjGH) or [discussions](https://github.com/Irev-Dev/cadhub/discussions).
+You might also be interested in the [Road Map](https://github.com/Irev-Dev/cadhub/discussions/212) and getting in touch via, [twitter](https://twitter.com/IrevDev), [discord](https://discord.gg/SD7zFRNjGH) or [discussions](https://github.com/Irev-Dev/cadhub/discussions).
 
 ## Who is CadHub
 
-[Kurt](https://github.com/Irev-Dev) and [Frank](https://github.com/franknoirot) make up the Core-team and [Jeremy](https://github.com/jmwright), [Torsten](https://github.com/t-paul) and [Hrg](https://github.com/hrgdavor) are a major contributors. Plus a number smaller contributors.
+[Kurt](https://github.com/Irev-Dev) and [Frank](https://github.com/franknoirot) make up the Core-team and [Jeremy](https://github.com/jmwright), [Torsten](https://github.com/t-paul) and [Hrg](https://github.com/hrgdavor) are major contributors. There are also a number of smaller contributors.
