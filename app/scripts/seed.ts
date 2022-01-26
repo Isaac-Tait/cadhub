@@ -4,33 +4,32 @@ import { db } from 'api/src/lib/db'
 
 import fetch from 'node-fetch'
 
-
 export default async () => {
   try {
     const users = [
       {
-        id: "a2b21ce1-ae57-43a2-b6a3-b6e542fd9e60",
-        userName: "local-user-1",
-        name: "local 1",
-        email: "localUser1@kurthutten.com"
+        id: 'a2b21ce1-ae57-43a2-b6a3-b6e542fd9e60',
+        userName: 'local-user-1',
+        name: 'local 1',
+        email: 'localUser1@kurthutten.com',
       },
       {
-        id: "682ba807-d10e-4caf-bf28-74054e46c9ec",
-        userName: "local-user-2",
-        name: "local 2",
-        email: "localUser2@kurthutten.com"
+        id: '682ba807-d10e-4caf-bf28-74054e46c9ec',
+        userName: 'local-user-2',
+        name: 'local 2',
+        email: 'localUser2@kurthutten.com',
       },
       {
-        id: "5cea3906-1e8e-4673-8f0d-89e6a963c096",
-        userName: "local-admin-2",
-        name: "local admin",
-        email: "localAdmin@kurthutten.com"
+        id: '5cea3906-1e8e-4673-8f0d-89e6a963c096',
+        userName: 'local-admin-2',
+        name: 'local admin',
+        email: 'localAdmin@kurthutten.com',
       },
     ]
 
     let existing
-    existing = await db.user.findMany({ where: { id: users[0].id }})
-    if(!existing.length) {
+    existing = await db.user.findMany({ where: { id: users[0].id } })
+    if (!existing.length) {
       await db.user.create({
         data: users[0],
       })
@@ -60,14 +59,18 @@ export default async () => {
       },
     ]
 
-    existing = await db.project.findMany({where: { title: projects[0].title}})
-    if(!existing.length) {
+    existing = await db.project.findMany({
+      where: { title: projects[0].title },
+    })
+    if (!existing.length) {
       await db.project.create({
         data: projects[0],
       })
     }
-    existing = await db.project.findMany({where: { title: projects[1].title}})
-    if(!existing.length) {
+    existing = await db.project.findMany({
+      where: { title: projects[1].title },
+    })
+    if (!existing.length) {
       const result = await db.project.create({
         data: projects[1],
       })
@@ -85,79 +88,85 @@ export default async () => {
       })
     }
 
-    const publicProjectsData = (await fetch("https://cadhub.xyz/.netlify/functions/graphql", {
-      "headers": {
-        "accept": "*/*",
-        "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
-        "auth-provider": "goTrue",
-        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDI4NDYxODgsInN1YiI6IjNjYTk2ZTM2LWVjNmQtNDQ5Yy04YTIyLTc3N2MwNGQxNzM1NiIsImVtYWlsIjoiay5odXR0ZW5AcHJvdG9ubWFpbC5jaCIsImFwcF9tZXRhZGF0YSI6eyJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXX0sInVzZXJfbWV0YWRhdGEiOnsiZnVsbF9uYW1lIjoiS3VydCBIdXR0ZW4ifX0.7EurH2b81ZKre3F5KMrDy6koxY3bFwc_M8XXaR-gUvk",
-        "cache-control": "no-cache",
-        "content-type": "application/json",
-        "pragma": "no-cache",
-        "sec-fetch-dest": "empty",
-        "sec-fetch-mode": "cors",
-        "sec-fetch-site": "same-origin",
-        "sec-gpc": "1",
-        "cookie": "nf_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDI4NDYxODgsInN1YiI6IjNjYTk2ZTM2LWVjNmQtNDQ5Yy04YTIyLTc3N2MwNGQxNzM1NiIsImVtYWlsIjoiay5odXR0ZW5AcHJvdG9ubWFpbC5jaCIsImFwcF9tZXRhZGF0YSI6eyJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXX0sInVzZXJfbWV0YWRhdGEiOnsiZnVsbF9uYW1lIjoiS3VydCBIdXR0ZW4ifX0.7EurH2b81ZKre3F5KMrDy6koxY3bFwc_M8XXaR-gUvk",
-        "Referer": "https://cadhub.xyz/",
-        "Referrer-Policy": "strict-origin-when-cross-origin"
-      },
-      "body": "{\"operationName\":\"PROJECTS\",\"variables\":{},\"query\":\"query PROJECTS {\\n  projects {\\n    id\\n    title\\n    cadPackage\\n    mainImage\\n    childForks {\\n      id\\n      __typename\\n    }\\n    createdAt\\n    updatedAt\\n    user {\\n      image\\n      userName\\n      __typename\\n    }\\n    Reaction {\\n      emote\\n      __typename\\n    }\\n    __typename\\n  }\\n}\\n\"}",
-      "method": "POST"
-    }).then(a => a.json())).data.projects
+    const publicProjectsData = (
+      await fetch('https://cadhub.xyz/.netlify/functions/graphql', {
+        headers: {
+          accept: '*/*',
+          'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
+          'auth-provider': 'goTrue',
+          authorization:
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDI4NDYxODgsInN1YiI6IjNjYTk2ZTM2LWVjNmQtNDQ5Yy04YTIyLTc3N2MwNGQxNzM1NiIsImVtYWlsIjoiay5odXR0ZW5AcHJvdG9ubWFpbC5jaCIsImFwcF9tZXRhZGF0YSI6eyJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXX0sInVzZXJfbWV0YWRhdGEiOnsiZnVsbF9uYW1lIjoiS3VydCBIdXR0ZW4ifX0.7EurH2b81ZKre3F5KMrDy6koxY3bFwc_M8XXaR-gUvk',
+          'cache-control': 'no-cache',
+          'content-type': 'application/json',
+          pragma: 'no-cache',
+          'sec-fetch-dest': 'empty',
+          'sec-fetch-mode': 'cors',
+          'sec-fetch-site': 'same-origin',
+          'sec-gpc': '1',
+          cookie:
+            'nf_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDI4NDYxODgsInN1YiI6IjNjYTk2ZTM2LWVjNmQtNDQ5Yy04YTIyLTc3N2MwNGQxNzM1NiIsImVtYWlsIjoiay5odXR0ZW5AcHJvdG9ubWFpbC5jaCIsImFwcF9tZXRhZGF0YSI6eyJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXX0sInVzZXJfbWV0YWRhdGEiOnsiZnVsbF9uYW1lIjoiS3VydCBIdXR0ZW4ifX0.7EurH2b81ZKre3F5KMrDy6koxY3bFwc_M8XXaR-gUvk',
+          Referer: 'https://cadhub.xyz/',
+          'Referrer-Policy': 'strict-origin-when-cross-origin',
+        },
+        body: '{"operationName":"PROJECTS","variables":{},"query":"query PROJECTS {\\n  projects {\\n    id\\n    title\\n    cadPackage\\n    mainImage\\n    childForks {\\n      id\\n      __typename\\n    }\\n    createdAt\\n    updatedAt\\n    user {\\n      image\\n      userName\\n      __typename\\n    }\\n    Reaction {\\n      emote\\n      __typename\\n    }\\n    __typename\\n  }\\n}\\n"}',
+        method: 'POST',
+      }).then((a) => a.json())
+    ).data.projects
     console.log(publicProjectsData)
 
-    const projectsPromises = publicProjectsData.map(({title, description, code, cadPackage}) => {
-      return db.project.create({
-        data: {
-          title,
-          description,
-          mainImage: 'CadHub/kjdlgjnu0xmwksia7xox',
-          code,
-          cadPackage,
-          user: {
-            connect: {
-              id: users[0].id,
+    const projectsPromises = publicProjectsData.map(
+      ({ title, description, code, cadPackage }) => {
+        return db.project.create({
+          data: {
+            title,
+            description,
+            mainImage: 'CadHub/kjdlgjnu0xmwksia7xox',
+            code,
+            cadPackage,
+            user: {
+              connect: {
+                id: users[0].id,
+              },
             },
           },
-        },
-      })
-    })
+        })
+      }
+    )
     await Promise.all(projectsPromises)
 
-    const aProject = await db.project.findUnique({where: {
-      title_userId: {
-        title: projects[0].title,
-        userId: users[0].id,
-      }
-    }})
+    const aProject = await db.project.findUnique({
+      where: {
+        title_userId: {
+          title: projects[0].title,
+          userId: users[0].id,
+        },
+      },
+    })
     await db.comment.create({
       data: {
-        text: "nice project, I like it",
+        text: 'nice project, I like it',
         userId: users[0].id,
         projectId: aProject.id,
         // user: {connect: { id: users[0].id}},
         // project: {connect: { id: aProject.id}},
-      }
+      },
     })
     await db.projectReaction.create({
       data: {
-        emote: "❤️",
+        emote: '❤️',
         userId: users[0].id,
         projectId: aProject.id,
         // user: {connect: { id: users[0].id}},
         // project: {connect: { id: aProject.id}},
-      }
+      },
     })
-
   } catch (error) {
     console.warn('Please define your seed data.')
     console.error(error)
   }
 }
 
-
-function getOpenScadHingeCode () {
+function getOpenScadHingeCode() {
   return `
 baseWidth=15; // [0.1:0.1:50]
 
