@@ -32,3 +32,52 @@ const SearchPage = () => {
 }
 
 export default SearchPage
+
+export const QUERY = gql`
+  query FIND_PROJECT_BY_USERNAME_TITLE(
+    $userName: String!
+    $projectTitle: String
+    $currentUserId: String
+  ) {
+    userProject: userName(userName: $userName) {
+      id
+      name
+      userName
+      bio
+      image
+      Project(projectTitle: $projectTitle) {
+        id
+        title
+        description
+        code
+        mainImage
+        createdAt
+        updatedAt
+        cadPackage
+        forkedFrom {
+          id
+          title
+          user {
+            id
+            userName
+          }
+        }
+        Reaction {
+          emote
+        }
+        userReactions: Reaction(userId: $currentUserId) {
+          emote
+        }
+        Comment {
+          id
+          text
+          createdAt
+          user {
+            userName
+            image
+          }
+        }
+      }
+    }
+  }
+`
