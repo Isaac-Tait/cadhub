@@ -21,7 +21,9 @@ const SearchPage = () => {
     <div>
       <MetaTags title="Search" description="Search page" />
       <h1>SearchPage</h1>
-      <RedwoodApolloProvider>
+      <RedwoodApolloProvider graphQLClientConfig={{
+        users: 
+      }}>
         <InstantSearch indexName="Designs" searchClient={searchClient}>
           <SearchBox />
           <Hits />

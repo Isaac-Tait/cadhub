@@ -1,6 +1,9 @@
 import type { Prisma } from '@prisma/client'
 
-import { db } from '$api/src/lib/db'
+import { db } from 'api/src/lib/db'
+
+import fetch from 'node-fetch'
+
 
 export default async () => {
   try {
@@ -30,12 +33,6 @@ export default async () => {
     if(!existing.length) {
       await db.user.create({
         data: users[0],
-      })
-    }
-    existing = await db.user.findMany({ where: { id: users[1].id }})
-    if(!existing.length) {
-      await db.user.create({
-        data: users[1],
       })
     }
 
@@ -88,7 +85,45 @@ export default async () => {
       })
     }
 
+    const publicProjectsData = (await fetch("https://cadhub.xyz/.netlify/functions/graphql", {
+      "headers": {
+        "accept": "*/*",
+        "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
+        "auth-provider": "goTrue",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDI4NDYxODgsInN1YiI6IjNjYTk2ZTM2LWVjNmQtNDQ5Yy04YTIyLTc3N2MwNGQxNzM1NiIsImVtYWlsIjoiay5odXR0ZW5AcHJvdG9ubWFpbC5jaCIsImFwcF9tZXRhZGF0YSI6eyJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXX0sInVzZXJfbWV0YWRhdGEiOnsiZnVsbF9uYW1lIjoiS3VydCBIdXR0ZW4ifX0.7EurH2b81ZKre3F5KMrDy6koxY3bFwc_M8XXaR-gUvk",
+        "cache-control": "no-cache",
+        "content-type": "application/json",
+        "pragma": "no-cache",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "sec-gpc": "1",
+        "cookie": "nf_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDI4NDYxODgsInN1YiI6IjNjYTk2ZTM2LWVjNmQtNDQ5Yy04YTIyLTc3N2MwNGQxNzM1NiIsImVtYWlsIjoiay5odXR0ZW5AcHJvdG9ubWFpbC5jaCIsImFwcF9tZXRhZGF0YSI6eyJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXX0sInVzZXJfbWV0YWRhdGEiOnsiZnVsbF9uYW1lIjoiS3VydCBIdXR0ZW4ifX0.7EurH2b81ZKre3F5KMrDy6koxY3bFwc_M8XXaR-gUvk",
+        "Referer": "https://cadhub.xyz/",
+        "Referrer-Policy": "strict-origin-when-cross-origin"
+      },
+      "body": "{\"operationName\":\"PROJECTS\",\"variables\":{},\"query\":\"query PROJECTS {\\n  projects {\\n    id\\n    title\\n    cadPackage\\n    mainImage\\n    childForks {\\n      id\\n      __typename\\n    }\\n    createdAt\\n    updatedAt\\n    user {\\n      image\\n      userName\\n      __typename\\n    }\\n    Reaction {\\n      emote\\n      __typename\\n    }\\n    __typename\\n  }\\n}\\n\"}",
+      "method": "POST"
+    }).then(a => a.json())).data.projects
+    console.log(publicProjectsData)
 
+    const projectsPromises = publicProjectsData.map(({title, description, code, cadPackage}) => {
+      return db.project.create({
+        data: {
+          title,
+          description,
+          mainImage: 'CadHub/kjdlgjnu0xmwksia7xox',
+          code,
+          cadPackage,
+          user: {
+            connect: {
+              id: users[0].id,
+            },
+          },
+        },
+      })
+    })
+    await Promise.all(projectsPromises)
 
     const aProject = await db.project.findUnique({where: {
       title_userId: {
@@ -128,7 +163,7 @@ baseWidth=15; // [0.1:0.1:50]
 
 hingeLength=30; // [0.1:0.1:50]
 
-// Hole mant mounting holes per half.
+// Hole man mounting holes per half.
 mountingHoleCount=3; // [1:20]
 
 baseThickness=3; // [0.1:0.1:20]
@@ -140,13 +175,13 @@ pinRadius=2; // [0.1:0.1:20]
 
 mountingHoleRadius=1.5; // [0.1:0.1:10]
 
-// How far away the hole is from the egde.
+// How far away the hole is from the edge.
 mountingHoleEdgeOffset=4; // [0:50]
 
 // Depending on the accuracy of your printer this may need to be increased in order for print in place to work.
 clearance=0.2; // [0.05:0.01:1]
 
-// Radius difference in the ivot taper to stop the hinge from falling apart. Should be increased with large clearance values.
+// Radius difference in the pivot taper to stop the hinge from falling apart. Should be increased with large clearance values.
 pinTaper=0.25; // [0.1:0.1:2]
 
 // calculated values
