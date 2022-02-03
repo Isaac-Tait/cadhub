@@ -11,6 +11,9 @@ import NavPlusButton from 'src/components/NavPlusButton'
 import ReactGA from 'react-ga'
 import { isBrowser } from '@redwoodjs/prerender/browserUtils'
 
+import algoliasearch from 'algoliasearch/lite'
+import { InstantSearch, SearchBox, Hits } from 'react-instantsearch-dom'
+
 import { ImageFallback } from 'src/components/ImageUploader'
 import useUser from 'src/helpers/hooks/useUser'
 import './MainLayout.css'
@@ -69,6 +72,12 @@ const MainLayout = ({ children, shouldRemoveFooterInIde }) => {
         })
     }
   }, [hash, client])
+
+  const searchClient = algoliasearch(
+    'Designs',
+    'f9163c551d5426a8e5c12b6c2daede42'
+  )
+
   return (
     <div
       className="flex flex-col h-full overflow-x-hidden overflow-y-scroll ch-scrollbar"
@@ -77,6 +86,13 @@ const MainLayout = ({ children, shouldRemoveFooterInIde }) => {
       <header id="cadhub-main-header">
         <nav className="flex justify-between h-16 sm:px-4 bg-ch-gray-900">
           <LogoType />
+          <div className='my-auto'>
+            <InstantSearch indexName="Designs" searchClient={searchClient}>
+              <SearchBox />
+              <Hits />
+            </InstantSearch>
+          </div>
+          
           <ul className="flex items-center">
             <li
               className={getActiveClasses(
