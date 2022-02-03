@@ -42,6 +42,7 @@ I have not even begun to figure this out
 I have not even begun to figure this out
 
 # GraphQL Query
+```
 query Algolia {
   projects {
     id
@@ -50,3 +51,4 @@ query Algolia {
     code
   }
 }
+```
