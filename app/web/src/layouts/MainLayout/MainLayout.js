@@ -74,8 +74,8 @@ const MainLayout = ({ children, shouldRemoveFooterInIde }) => {
   }, [hash, client])
 
   const searchClient = algoliasearch(
-    'Designs',
-    'f9163c551d5426a8e5c12b6c2daede42'
+    'Projects',
+    '6d62da295dcb97fc8c022ff317a7527f'
   )
 
   return (

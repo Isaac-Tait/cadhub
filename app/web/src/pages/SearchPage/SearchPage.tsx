@@ -12,8 +12,8 @@ import algoliasearch from 'algoliasearch/lite'
 import { InstantSearch, SearchBox, Hits } from 'react-instantsearch-dom'
 
 const searchClient = algoliasearch(
-  'Designs',
-  'f9163c551d5426a8e5c12b6c2daede42'
+  'Projects',
+  '6d62da295dcb97fc8c022ff317a7527f'
 )
 
 const SearchPage = () => {
@@ -34,7 +34,7 @@ const SearchPage = () => {
 export default SearchPage
 
 export const QUERY = gql`
-  query FIND_PROJECT_BY_USERNAME_TITLE(
+  query FIND_PROJECT(
     $userName: String!
     $projectTitle: String
     $currentUserId: String
@@ -60,21 +60,6 @@ export const QUERY = gql`
           user {
             id
             userName
-          }
-        }
-        Reaction {
-          emote
-        }
-        userReactions: Reaction(userId: $currentUserId) {
-          emote
-        }
-        Comment {
-          id
-          text
-          createdAt
-          user {
-            userName
-            image
           }
         }
       }
