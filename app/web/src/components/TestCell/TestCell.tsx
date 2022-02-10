@@ -1,13 +1,10 @@
-import type { FindSearchQuery } from 'types/graphql'
+import type { FindTestQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
-  query FindSearchQuery($id: Int!) {
-    projects {
+  query FindTestQuery($id: Int!) {
+    test: test(id: $id) {
       id
-      title
-      description
-      code
     }
   }
 `
@@ -20,6 +17,6 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ search }: CellSuccessProps<FindSearchQuery>) => {
-  return <div>{JSON.stringify(search)}</div>
+export const Success = ({ test }: CellSuccessProps<FindTestQuery>) => {
+  return <div>{JSON.stringify(test)}</div>
 }

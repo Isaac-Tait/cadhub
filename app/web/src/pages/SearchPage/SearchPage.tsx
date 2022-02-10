@@ -34,11 +34,7 @@ const SearchPage = () => {
 export default SearchPage
 
 export const QUERY = gql`
-  query FIND_PROJECT(
-    $userName: String!
-    $projectTitle: String
-    $currentUserId: String
-  ) {
+  query FIND_PROJECT($userName: String!, $projectTitle: String) {
     userProject: userName(userName: $userName) {
       id
       name
