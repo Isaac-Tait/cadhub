@@ -16,7 +16,7 @@ const searchClient = algoliasearch(
   '6d62da295dcb97fc8c022ff317a7527f'
 )
 
-const SearchPage = () => {
+const SearchPage = ({ input }) => {
   return (
     <div>
       <MetaTags title="Search" description="Search page" />
@@ -32,33 +32,3 @@ const SearchPage = () => {
 }
 
 export default SearchPage
-
-export const QUERY = gql`
-  query FIND_PROJECT($userName: String!, $projectTitle: String) {
-    userProject: userName(userName: $userName) {
-      id
-      name
-      userName
-      bio
-      image
-      Project(projectTitle: $projectTitle) {
-        id
-        title
-        description
-        code
-        mainImage
-        createdAt
-        updatedAt
-        cadPackage
-        forkedFrom {
-          id
-          title
-          user {
-            id
-            userName
-          }
-        }
-      }
-    }
-  }
-`
