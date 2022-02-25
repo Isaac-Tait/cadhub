@@ -1,3 +1,11 @@
+### Project
+
+In response to this [issue](https://github.com/Irev-Dev/cadhub/issues/104) I have endeavored to build search functionality into CadHub a community where they believe that 
+
+> *"Code is the future of CAD - Designs backed by reliable, easy-to-write code open a world of new workflows and collaboration. We're building a place where you can build that future."*
+
+I have built a [project](https://github.com/Isaac-Tait/cadhub/projects/1) to keep track of issues, questions, and my overall progress. I have received some wonderful [input and assistance](https://community.redwoodjs.com/t/question-about-cells-in-regards-to-algolia-search-functionality/2755) from the RedwoodJS community too.
+
 So far I have created the following:
 
 ## Web
