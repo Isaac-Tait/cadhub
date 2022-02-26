@@ -2,8 +2,8 @@ import type { FindSearchQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
-  query FindSearchQuery($id: Int!) {
-    projects {
+  query FindSearchQuery($input: String!) {
+    projects(input: $input) {
       id
       title
       description
