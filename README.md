@@ -11,7 +11,7 @@ So far I have created the following:
 ## Web
 `src -> components -> SearchCell` This is currently returning an error when you run `yarn rw dev` 
 
-Does this need to be a plural cell? 
+Does this need to be a plural cell??
 
 ```
 gen |   Error 0: GraphQLDocumentError: Unknown type "Int".
@@ -44,10 +44,10 @@ ALGOLIA_ADMIN_KEY=<Admin API Key>
 ```
 ## API
 
-I have not even begun to figure this out
+On the API side I have `services` (within `src`). I also have `search.sdl.js` within the `graphql` folder.
 
-## Auth
-I have not even begun to figure this out
+## Script
+I am working on a script to populate the Algolia indices that will "house" the database and provide the results that the user/client will need.
 
 # GraphQL Query
 ```
